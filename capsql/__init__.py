@@ -90,6 +90,10 @@ class CapSQL:
     elements: list[sqlalchemy.sql.Executable] = dataclasses.field(default_factory=list)
     statements: list[str] = dataclasses.field(default_factory=list)
 
+    @property
+    def text(self) -> str:
+        return '\n\n'.join(self.statements)
+
     def clear(self) -> None:
         self.elements = []
         self.statements = []
@@ -128,7 +132,7 @@ class CapSQL:
                 # when using the standard pytest logging config, which prefixes the
                 # first line of log messages with `INFO ...`, which causes misalignment
                 # if we're not careful.
-                log_message = '\n' + textwrap.indent(message, '  ')
+                log_message = '\n' + textwrap.indent(message, '    ')
             else:
                 log_message = message
             self.logger.info(log_message)
@@ -138,7 +142,7 @@ class CapSQL:
         conn: sqlalchemy.engine.Connection,  # pylint: disable=unused-argument
         cursor: sqlalchemy.engine.interfaces.DBAPICursor,  # pylint: disable=unused-argument
         statement: str,
-        parameters: Any,  # pylint: disable=unused-argument
+        parameters: Any,
         context: sqlalchemy.engine.ExecutionContext,  # pylint: disable=unused-argument
         executemany: bool,  # pylint: disable=unused-argument
     ) -> None:
@@ -148,13 +152,13 @@ class CapSQL:
                 reindent=True,
                 reindent_aligned=False,  # noop?
             )
+        if self.show_params:
+            statement += f'\n-- params: {parameters!r}'
         self.statements.append(statement)
         # TODO: capture params too?
 
         if self.echo or self.log:
             self._output(self._colorize(statement) if self.color else statement)
-            if self.show_params:
-                self._output(f'Params: {parameters!r}')
 
     def __enter__(self) -> Self:
         # TODO: gracefully deal with reentrancy

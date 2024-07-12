@@ -13,6 +13,8 @@ disable=
     too-many-arguments,
     too-many-instance-attributes,
     wrong-import-order,
+enable=
+    useless-suppression
 
 [REPORTS]
 output-format=colorized
