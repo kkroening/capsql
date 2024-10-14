@@ -6,7 +6,7 @@ authors = ["Karl Kroening <karlk@kralnet.us>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.11"
+python = "^3.11"
 sqlalchemy = {extras = ["asyncio"], version = ">=2.0"}
 pygments = ">=2"
 sqlparse = ">=0.4"
