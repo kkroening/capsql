@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+##
+## `scripts/fixfmt`: Fixes code formatting by running Black and isort, and
+## updating any affected files.
+##
+## > [!WARNING]
+## > This script modifies the local workarea, so be sure to commit unsaved
+## > changes first if necessary.
+##
+
+set -euo pipefail
+. "$(dirname "${BASH_SOURCE}")/base.sh"
+
+_init() {
+  base::show_banner "Initializing workarea"
+  poetry install
+}
+
+_black() {
+  base::show_banner "Applying Black formatting ..."
+  poetry run black .
+}
+
+_isort() {
+  base::show_banner "Applying isort ..."
+  poetry run isort capsql tests
+}
+
+_test_service() (
+  _init || return
+  _isort || return
+  _black || return
+)
+
+_main() {
+  cd "${BASE__ROOT_DIR}"
+
+  if ! _test_service; then
+    base::abort "Failed; aborting."
+  else
+    base::show_banner "Done."
+  fi
+}
+
+_main "$@"
