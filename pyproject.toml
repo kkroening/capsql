@@ -1,39 +1,40 @@
+[build-system]
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
+
 [tool.poetry]
-name = "capsql"
-version = "0.2.0"
-description = ""
-authors = ["Karl Kroening <karlk@kralnet.us>"]
-readme = "README.md"
+name = 'capsql'
+version = '0.2.0'
+description = ''
+authors = ['Karl Kroening <karlk@kralnet.us>']
+readme = 'README.md'
 
 [tool.poetry.dependencies]
-python = "^3.11"
-sqlalchemy = {extras = ["asyncio"], version = ">=2.0"}
-pygments = ">=2"
-sqlparse = ">=0.4"
-
+pygments = '*'
+python = '>=3.11,<4'
+sqlalchemy = { extras = ['asyncio'], version = '*' }
+sqlparse = '*'
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
-ipython = "^8.23.0"
-isort = {extras = ["colors"], version = "^5.13.2"}
-mock = "^5.1.0"
-mypy = "^1.9.0"
-pylint = "^3.1.0"
-pytest = "^8.1.1"
-pytest-asyncio = "^0.23.6"
-pytest-faker = "^2.0.0"
-pytest-mock = "^3.14.0"
-pytest-only = "^2.1.1"
-pytest-randomly = "^3.15.0"
-pytest-timeout = "^2.3.1"
-pytest-xdist = "^3.5.0"
-types-mock = "^5.1.0.20240311"
-types-pygments = "^2.17.0.20240310"
-aiosqlite = "^0.20.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+aiosqlite = '*'
+black = '*'
+ipython = '*'
+isort = { extras = ['colors'], version = '*' }
+mock = '*'
+mypy = '*'
+pylint = '*'
+pytest = '*'
+pytest-asyncio = '*'
+pytest-faker = '*'
+pytest-mock = '*'
+pytest-only = '*'
+pytest-randomly = '*'
+pytest-timeout = '*'
+pytest-xdist = '*'
+setuptools = '<80'  # TMP/FIXME: workaround for pytest-only being misbehaved
+types-mock = '*'
+types-pygments = '*'
+types-setuptools = '<80'  # TMP/FIXME: workaround for pytest-only being misbehaved
 
 [tool.black]
 include = '^/(capsql|tests)/.*\.pyi?$'
@@ -57,18 +58,38 @@ files = 'capsql'
 mypy_path = 'stubs'
 namespace_packages = true
 no_implicit_optional = true
+pretty = true
 show_error_codes = true
+show_error_context = true
+show_traceback = true
 strict_equality = true
 warn_redundant_casts = true
 warn_unused_configs = true
 
+[[tool.mypy.overrides]]
+module = 'capsql.*'
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+extra_checks = true
+no_implicit_optional = true
+no_implicit_reexport = true
+strict_concatenate = true
+strict_equality = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_ignores = true
+
 [tool.pytest.ini_options]
 addopts = '--pdbcls=IPython.terminal.debugger:Pdb'
 filterwarnings = [
-    "error::pytest.PytestUnhandledCoroutineWarning",
-    "error::pytest.PytestUnraisableExceptionWarning",
-    "error::RuntimeWarning",
-    # "ignore:distutils Version classes are deprecated. Use packaging.version instead.:DeprecationWarning:pytest_freezegun",
+    'error::pytest.PytestUnraisableExceptionWarning',
+    'error::RuntimeWarning',
+    # 'error::pytest.PytestUnhandledCoroutineWarning',  # removed in recent pytest version?
 ]
 asyncio_mode = 'auto'
 markers = []

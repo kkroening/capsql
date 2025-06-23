@@ -1,20 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
-_COLOR_LIGHT_GREEN='\033[1;32m'
-_COLOR_OFF='\033[0m'
-
-_show_banner() {
-  printf "\n===> ${_COLOR_LIGHT_GREEN}${@}${_COLOR_OFF}\n" >&2
-}
+. "$(dirname "${BASH_SOURCE}")/base.sh"
 
 _init() {
-  _show_banner "Initializing workarea"
+  base::show_banner "Initializing workarea"
   poetry install
 }
 
 _black() {
-  _show_banner 'Running Black ...'
+  base::show_banner 'Running Black ...'
   poetry run black \
     . \
     --check \
@@ -24,7 +18,7 @@ _black() {
 }
 
 _isort() {
-  _show_banner 'Running isort ...'
+  base::show_banner 'Running isort ...'
   poetry run isort \
     --check \
     --color \
@@ -35,19 +29,19 @@ _isort() {
 }
 
 _mypy() {
-  _show_banner "Running mypy"
+  base::show_banner "Running mypy"
   poetry run mypy \
     || return
 }
 
 _pylint() {
-  _show_banner 'Running pylint ...'
+  base::show_banner 'Running pylint ...'
   poetry run pylint capsql \
     || return
 }
 
 _pytest() (
-  _show_banner "Running pytest"
+  base::show_banner "Running pytest"
   poetry run pytest \
     -p no:only \
     --strict-markers \
@@ -69,7 +63,7 @@ _main() {
   ); then
     echo '[ERROR] Failed; aborting.' >&2
   else
-    _show_banner "Done."
+    base::show_banner "Done."
   fi
 }
 

@@ -98,7 +98,7 @@ class CapSQL:
         self.elements = []
         self.statements = []
 
-    def _handle_before_execute(
+    def _handle_before_execute(  # pylint: disable=too-many-positional-arguments
         self,
         conn: sqlalchemy.engine.Connection,  # pylint: disable=unused-argument
         clauseelement: sqlalchemy.sql.Executable,
@@ -137,7 +137,7 @@ class CapSQL:
                 log_message = message
             self.logger.info(log_message)
 
-    def _handle_before_cursor_execute(
+    def _handle_before_cursor_execute(  # pylint: disable=too-many-positional-arguments
         self,
         conn: sqlalchemy.engine.Connection,  # pylint: disable=unused-argument
         cursor: sqlalchemy.engine.interfaces.DBAPICursor,  # pylint: disable=unused-argument
